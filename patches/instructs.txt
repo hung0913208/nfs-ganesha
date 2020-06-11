@@ -1,0 +1,3 @@
+cp nfs_rpc_dispatcher_thread.c src/MainNFSD/nfs_rpc_dispatcher_thread.c
+cp CMakeLists-Ganesha.txt src/CMakeLists.txt
+cp CMakeLists-nTiRPC.txt src/libntirpc/CMakeLists.txt

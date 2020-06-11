@@ -1,0 +1,32 @@
+name: Verify commit with the simple test suite
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        cxx: [g++]
+      
+    steps:
+      - uses: actions/checkout@v2
+      - name: add specific repository
+        run: |
+          sudo add-apt-repository -y ppa:gluster/glusterfs-7
+          sudo apt-add-repository -y ppa:lttng/ppa
+      - name: update
+        run: sudo apt update
+      - name: prepare
+        run: sudo apt install qemu
+      - name: fetch libraries
+        run: ./tests/pipeline/prepare.sh --dry-run
+      - name: build and test
+        env:
+          CXX: ${{ matrix.cxx }}
+          MEGA: ${{ secrets.MEGA }}
+          NGROK: ${{ secrets.NGROK }}
+          PROJECT: ${{ secrets.PROJECT }}
+          INTERACT: ${{ secrets.INTERACT }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: ./Base/Tests/Pipeline/Create.sh
